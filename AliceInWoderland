@@ -1,0 +1,33 @@
+
+import string
+s = """Alice’s home. Lewis Carroll is discovered, playing chess. Golden-haired Alice, in a little blue dress, a black kitten in her arms, stands watching him.
+
+
+Alice
+
+That’s a funny game, uncle. What did you do then?
+
+
+Carroll
+
+A red pawn took a white pawn; this way. You see, Alice, the chessboard is divided into sixty-four squares, red and white, and the white army tries to win and the red army tries to win. It’s like a battle!
+
+
+Alice
+
+With soldiers?
+
+
+Carroll
+
+Yes, here are the Kings and Queens they are fighting for. That’s the Red Queen and here’s the White Queen."""
+s = s.translate(str.maketrans('', '', string.punctuation))
+f = open("alice_words.txt", "w")
+q = list(s.split())
+print(q)
+words_count = {}
+for word in q:
+    words_count[word] = words_count.get(word, 0)+1
+
+for (key, values) in words_count.items():
+    f.write(str(key)+">>>"+str(values)+'\n\n')
