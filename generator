@@ -21,6 +21,23 @@ class MainApp(tk.Tk):
         #button's style and text size
         s = ttk.Style()
         s.configure('my.TButton', font=('Helvetica', 24))
+        
+        
+        menubar=Menu(tk.Frame(self))
+        filemenu=Menu(menubar,tearoff=0)
+        filemenu.add_command(label="New", command=quit)
+        filemenu.add_command(label="Open", command=quit)
+        filemenu.add_command(label="Save", command=quit)
+        filemenu.add_separator()
+        filemenu.add_command(label="Exit", command=quit)
+        menubar.add_cascade(label="File", menu=filemenu)
+         
+        helpmenu = Menu(menubar, tearoff=0)
+        helpmenu.add_command(label="Help Index", command=quit)
+        helpmenu.add_command(label="About...", command=quit)
+        menubar.add_cascade(label="Help", menu=quit)
+        
+        tk.Frame.configure(self,menu=menubar)
 
         for F in (MainWindow, RouteLibrary, Variants, Kmatrix):
 
@@ -33,6 +50,8 @@ class MainApp(tk.Tk):
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
+        
+        
         
     
 
@@ -113,22 +132,7 @@ class Kmatrix(tk.Frame):
         
         button1.place(relx=0.01,rely=0.00,relwidth=0.1,relheight=0.1)
         
-        menubar=Menu(tk.Frame(self))
-        filemenu=Menu(menubar,tearoff=0)
-        filemenu.add_command(label="New", command=quit)
-        filemenu.add_command(label="Open", command=quit)
-        filemenu.add_command(label="Save", command=quit)
-        filemenu.add_separator()
-        filemenu.add_command(label="Exit", command=quit)
-        menubar.add_cascade(label="File", menu=filemenu)
-         
-        helpmenu = Menu(menubar, tearoff=0)
-        helpmenu.add_command(label="Help Index", command=quit)
-        helpmenu.add_command(label="About...", command=quit)
-        menubar.add_cascade(label="Help", menu=quit)
-        
-    
-        tk.Frame.config(self,menu=menubar)
+       
         
         #button2 = ttk.Button(self, text="Start Macro",style="my.TButton",
          #                    command=lambda: doSomething())
