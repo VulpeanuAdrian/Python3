@@ -1,214 +1,274 @@
 import tkinter as tk
-from tkinter import ttk, Toplevel, Radiobutton
+from tkinter import ttk
+from tkinter.ttk import *
 from tkinter import *
 LARGE_FONT = ("Verdana", 25)
 
 
-
-class MainApp(tk.Tk):
+class MainApp(tk.Tk):  # import class tk.TK from library tkinter
     def __init__(self):
-        tk.Tk.__init__(self)
-
+        tk.Tk.__init__(self)  # tkinter initialization
         tk.Tk.wm_title(self, "Generator")
-        tk.Tk.wm_state(self,"zoomed")
+        # .geometry("window width x window height + position right + position down")
+        tk.Tk.wm_geometry(self, "1200x750+500+150")
+        # tk.Tk.wm_state(self, "zoomed")  # for full screen
         container = tk.Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        
-        #button's style and text size
+
+        # button's style and text size
         s = ttk.Style()
-        s.configure('my.TButton', font=('Helvetica', 24))
-        
-        
-        menubar=Menu(tk.Frame(self))
-        filemenu=Menu(menubar,tearoff=0)
+        # buttons fond style and background
+        s.configure('my.TButton', font=('Helvetica', 24),
+                    background="#00ff00", foreground='#245336')
+
+        menubar = Menu(tk.Frame(self))
+        filemenu = Menu(menubar, tearoff=0)
         filemenu.add_command(label="New", command=quit)
         filemenu.add_command(label="Open", command=quit)
         filemenu.add_command(label="Save", command=quit)
         filemenu.add_separator()
         filemenu.add_command(label="Exit", command=quit)
         menubar.add_cascade(label="File", menu=filemenu)
-         
+
         helpmenu = Menu(menubar, tearoff=0)
         helpmenu.add_command(label="Help Index", command=quit)
         helpmenu.add_command(label="About...", command=quit)
         menubar.add_cascade(label="Help", menu=quit)
-        
-        tk.Frame.configure(self,menu=menubar)
 
-        for F in (MainWindow, RouteLibrary, Variants, Kmatrix):
+        tk.Frame.configure(self, menu=menubar)
+
+        for F in (MainWindow, RouteLibrary, Variants, Kmatrix, GenerateFunction):  # baseline to add pages
 
             frame = F(container, self)
             self.frames[F] = frame
-            frame.grid(row=0, column=0, sticky="nsew")
-            frame.config(bg="white")
+            frame.grid(row=0, column=0, sticky="nsew")  # north south east west
+            frame.config(bg="#e6ffff")  # background color
         self.show_frame(MainWindow)
 
     def show_frame(self, cont):
         frame = self.frames[cont]
         frame.tkraise()
-        
-        
-        
-    
+
 
 class MainWindow(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Start Page", font=LARGE_FONT)
+        label = tk.Label(self, text="Start Page",
+                         font=LARGE_FONT, bg="#e6ffff")
         label.pack(pady=10, padx=10)
-        
-        button1 = ttk.Button(self, text="Route Library",style="my.TButton",
+
+        button1 = ttk.Button(self, text="Route Library", style="my.TButton",
                              command=lambda: controller.show_frame(RouteLibrary))
-        
+
         button1.place(relx=0.01, rely=0.08, relwidth=0.2, relheight=0.1)
 
-        button2 = ttk.Button(self, text="Variants",style="my.TButton",
+        button2 = ttk.Button(self, text="Variants", style="my.TButton",
                              command=lambda: controller.show_frame(Variants))
 
         button2.place(relx=0.01, rely=0.16, relwidth=0.2, relheight=0.1)
 
-
-        button3 = ttk.Button(self, text="Kmatrix",style="my.TButton",
+        button3 = ttk.Button(self, text="Kmatrix", style="my.TButton",
                              command=lambda: controller.show_frame(Kmatrix))
         button3.place(relx=0.01, rely=0.24, relwidth=0.2, relheight=0.1)
 
-
-
-
+        button4 = ttk.Button(self, text="GenFunc", style="my.TButton",
+                             command=lambda: controller.show_frame(GenerateFunction))
+        button4.place(relx=0.01, rely=0.32, relwidth=0.2, relheight=0.1)
 
 
 class RouteLibrary(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Route Library", font=LARGE_FONT)
+        label = tk.Label(self, text="RouteLibray",
+                         font=LARGE_FONT, bg="#e6ffff")
         label.pack(pady=10, padx=10)
 
-        button1 = ttk.Button(self, text="Back",style="my.TButton",
+        button1 = ttk.Button(self, text="Back", style="my.TButton",
                              command=lambda: controller.show_frame(MainWindow))
 
-        button1.place(relx=0.01,rely=0.08,relwidth=0.1,relheight=0.1)
+        button1.place(relx=0.00, rely=0.00, relwidth=0.07, relheight=0.07)
 
 
-        
-
-#RouteLibrary
 class Variants(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page two", font=LARGE_FONT)
+        label = tk.Label(self, text="Page two", font=LARGE_FONT, bg="#e6ffff")
         label.pack(pady=10, padx=10)
 
-        button1 = ttk.Button(self, text="Back",style="my.TButton",
+        button1 = ttk.Button(self, text="Back", style="my.TButton",
                              command=lambda: controller.show_frame(MainWindow))
-        button1.place(relx=0.01,rely=0.08,relwidth=0.1,relheight=0.1)
+        button1.place(relx=0.00, rely=0.00, relwidth=0.07, relheight=0.07)
 
-       
-       
 
-#def doSomething():
+# def doSomething():
 #   top=Toplevel()
 #   return top
 
-#Kmatrix
+# Kmatrix
 
 class Kmatrix(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="KMatrix", font=LARGE_FONT)
+        tk.Frame(bg="blue")
+        tk.Frame.place(self, relx=0.1, rely=0.1, relwidth=0.8, relheight=0.8)
+        label = tk.Label(self, text="KMatrix", font=LARGE_FONT, bg="#e6ffff")
         label.pack(pady=10, padx=10)
-        
-        label1 = tk.Label(self, text="Hw Variants", font=LARGE_FONT)
-        
-        label1.place(relx=0.01,rely=0.1)
 
+        label1 = tk.Label(self, text="K Matrix", font=LARGE_FONT, bg="#e6ffff")
 
-        button1 = ttk.Button(self, text="Back",style="my.TButton",
+        label1.place(relx=0.01, rely=0.1)
+
+        label2 = tk.Label(self, text="Variants",
+                          font=LARGE_FONT, bg="#e6ffff")
+
+        label2.place(relx=0.2, rely=0.1)
+
+        button1 = ttk.Button(self, text="Back", style="my.TButton",
                              command=lambda: controller.show_frame(MainWindow))
 
-        
-        button1.place(relx=0.01,rely=0.00,relwidth=0.1,relheight=0.1)
-        
-       
-        
-        #button2 = ttk.Button(self, text="Start Macro",style="my.TButton",
-         #                    command=lambda: doSomething())
+        button1.place(relx=0.00, rely=0.00, relwidth=0.07, relheight=0.07)
 
-        #button2.pack()
-        #button2.place(relx=0.01, rely=0.16, relwidth=0.1, relheight=0.1)
-        
-        fileExport="dadwadwa"
+        # button2 = ttk.Button(self, text="Start Macro",style="my.TButton",
+        #                    command=lambda: doSomething())
+
+        # button2.pack()
+        # button2.place(relx=0.01, rely=0.16, relwidth=0.1, relheight=0.1)
+
+        fileExport = "dadwadwa"
+
         def sel():
-           selection="You selected the option "+str(self.count.get())
-           label.config(text=selection)
-           file = open('FunctionName.txt', 'w')
-           file.write(fileExport)
-           file.close
-           
-        self.count=tk.IntVar()
+            selection = "You selected the option "+str(self.count.get())
+            label.config(text=selection)
+            file = open('FunctionName.txt', 'w')
+            file.write(fileExport)
+            file.close
 
-        r1=Radiobutton(self,text = "Hw_Variant1",relief=RAISED, 
-                       variable = self.count, value = 1,command = lambda: sel())
-        r1.place(relx=0.01,rely=0.18)
-        r2=Radiobutton(self,text = "Hw_Variant2",relief=RAISED,
-                       variable = self.count, value = 2,command = lambda: sel())
-        r2.place(relx=0.01,rely=0.22)
-        
-        r3=Radiobutton(self,text = "Hw_Variant3",relief=RAISED,
-                       variable = self.count, value = 3,command = lambda: sel())
-        r3.place(relx=0.01,rely=0.26)
-        
-        r4=Radiobutton(self,text = "Hw_Variant4",relief=RAISED,
-                       variable = self.count, value = 4,command = lambda: sel())
-        r4.place(relx=0.01,rely=0.30)
-        
-        r5=Radiobutton(self,text = "Hw_Variant5",relief=RAISED,
-                       variable = self.count, value = 5,command = lambda: sel())
-        r5.place(relx=0.01,rely=0.34)
-        
-        r6=Radiobutton(self,text = "Hw_Variant6",relief=RAISED,
-                       variable = self.count, value = 6,command = lambda: sel())
-        r6.place(relx=0.01,rely=0.38)
-        
-        r7=Radiobutton(self,text = "Hw_Variant7",relief=RAISED,
-                        variable = self.count, value = 7,command = lambda: sel())
-        r7.place(relx=0.01,rely=0.42)
-        
-        button1 = ttk.Button(self, text="Hw_Variant1",style="my.TButton",
+        self.count = tk.IntVar()
+
+        r1 = Radiobutton(self, text="Hw_Variant1", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=1, command=lambda: sel())
+        r1.place(relx=0.01, rely=0.18)
+        r2 = Radiobutton(self, text="Hw_Variant2", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=2, command=lambda: sel())
+        r2.place(relx=0.01, rely=0.22)
+
+        r3 = Radiobutton(self, text="Hw_Variant3", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=3, command=lambda: sel())
+        r3.place(relx=0.01, rely=0.26)
+
+        r4 = Radiobutton(self, text="Hw_Variant4", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=4, command=lambda: sel())
+        r4.place(relx=0.01, rely=0.30)
+
+        r5 = Radiobutton(self, text="Hw_Variant5", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=5, command=lambda: sel())
+        r5.place(relx=0.01, rely=0.34)
+
+        r6 = Radiobutton(self, text="Hw_Variant6", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=6, command=lambda: sel())
+        r6.place(relx=0.01, rely=0.38)
+
+        r7 = Radiobutton(self, text="Hw_Variant7", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=7, command=lambda: sel())
+        r7.place(relx=0.01, rely=0.42)
+
+        r8 = Radiobutton(self, text="Front Driver", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=3, command=lambda: sel())
+        r8.place(relx=0.8, rely=0.1)
+
+        r9 = Radiobutton(self, text="Front Passanger", bg='#80ffff', relief=RAISED,
+                         variable=self.count, value=4, command=lambda: sel())
+        r9.place(relx=0.8, rely=0.14)
+
+        r10 = Radiobutton(self, text="Rear Driver", bg='#80ffff', relief=RAISED,
+                          variable=self.count, value=5, command=lambda: sel())
+        r10.place(relx=0.8, rely=0.18)
+
+        r11 = Radiobutton(self, text="Rear Passanger", bg='#80ffff', relief=RAISED,
+                          variable=self.count, value=6, command=lambda: sel())
+        r11.place(relx=0.8, rely=0.22)
+
+        button1 = ttk.Button(self, text="Hw_Variant1", style="my.TButton",
                              command=lambda: sel())
-        button1.place(relx=0.12,rely=0.18)
-        
-        button1 = ttk.Button(self, text="Hw_Variant2",style="my.TButton",
+        button1.place(relx=0.2, rely=0.18)
+
+        button2 = ttk.Button(self, text="Hw_Variant2", style="my.TButton",
                              command=lambda: sel())
-        button1.place(relx=0.12,rely=0.24)
-        
-        button1 = ttk.Button(self, text="Hw_Variant3",style="my.TButton",
+        button2.place(relx=0.2, rely=0.24)
+
+        button3 = ttk.Button(self, text="Hw_Variant3", style="my.TButton",
                              command=lambda: sel())
-        button1.place(relx=0.12,rely=0.30)
-        
-        button1 = ttk.Button(self, text="Hw_Variant4",style="my.TButton",
+        button3.place(relx=0.2, rely=0.30)
+
+        button4 = ttk.Button(self, text="Hw_Variant4", style="my.TButton",
                              command=lambda: sel())
-        button1.place(relx=0.12,rely=0.36)
-        
-        button1 = ttk.Button(self, text="Hw_Variant5",style="my.TButton",
+        button4.place(relx=0.2, rely=0.36)
+
+        button5 = ttk.Button(self, text="Hw_Variant5", style="my.TButton",
                              command=lambda: sel())
-        button1.place(relx=0.12,rely=0.42)
-        
-        button1 = ttk.Button(self, text="Hw_Variant6",style="my.TButton",
+        button5.place(relx=0.2, rely=0.42)
+
+        button6 = ttk.Button(self, text="Hw_Variant6", style="my.TButton",
                              command=lambda: sel())
-        button1.place(relx=0.12,rely=0.48)
-        
-        button1 = ttk.Button(self, text="Hw_Variant7",style="my.TButton",
+        button6.place(relx=0.2, rely=0.48)
+
+        button7 = ttk.Button(self, text="Hw_Variant7", style="my.TButton",
                              command=lambda: sel())
-        button1.place(relx=0.12,rely=0.54)
-         
-        
+
+        button7.place(relx=0.2, rely=0.54)
+
+        # regular expression
+
+        button8 = ttk.Button(self, text="Regular Expresion", style="my.TButton",
+                             command=lambda: sel())
+        button8.place(relx=0.01, rely=0.9)
+
+        # route library
+        button9 = ttk.Button(self, text="Route Library", style="my.TButton",
+                             command=lambda: sel())
+        button9.place(relx=0.4, rely=0.9)
+
+        # Auto complete
+
+        button9 = ttk.Button(self, text="Auto Complete", style="my.TButton",
+                             command=lambda: sel())
+        button9.place(relx=0.75, rely=0.9)
+
        # label2=Label(self)
        # label2.pack()
-     
+
+
+class GenerateFunction(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Generate Function",
+                         font=LARGE_FONT, bg="#e6ffff")
+        label.pack(pady=10, padx=10)
+
+        button1 = ttk.Button(self, text="Back", style="my.TButton",
+                             command=lambda: controller.show_frame(MainWindow))
+
+        button1.place(relx=0.00, rely=0.00, relwidth=0.07, relheight=0.07)
+
+        button2 = ttk.Button(self, text="GenFun", style="my.TButton",
+                             command=self.getFunctionName)
+
+        button2.place(relx=0.00, rely=0.1, relwidth=0.14, relheight=0.07)
+
+        label1 = tk.Label(self, text="Function Name",
+                          font=12, bg="#e6ffff")
+        label1.place(relx=0, rely=0.2)
+
+        self.Entry1 = Entry(self, bd=5)
+        self.Entry1.place(relx=0.1, rely=0.2, relwidth=0.2)
+
+    def getFunctionName(self):
+        s = self.Entry1.get()
+        print(s)
 
 
 app = MainApp()
