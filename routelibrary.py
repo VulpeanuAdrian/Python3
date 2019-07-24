@@ -4,16 +4,21 @@ from openpyxl import load_workbook
 from builtins import str
 import numpy as np
 from openpyxl.utils.exceptions import SheetTitleException
+import xlrd
+import pandas as  pd
 
 f=open('RouteLibrary.txt','w')
 
 
-wb= load_workbook('D:\SCU_BMW\MakeFiles\Generator\Example.xlsx')
+wb= load_workbook('D:\SCU_BMW\MakeFiles\Generator\Generator.xlsm')
    
-   
+
 sheet=wb['RouteLibrary']
 
-q=[]
+
+
+
+
 
 f.write("// ################################## RouteLibrary ################################## ")
 f.write("\n")
@@ -38,10 +43,14 @@ def RouteLibrary(sheet):
       q3.append(row_cells[0].value)
        
      
-   for i in range(len(q)):      
-      f.write("""define(`{0}',`CALL{2}"\TestSequences\Library\Functions\FNCT_{1}\`{0}'"')""".format(q[i],q2[i],lambda q3[i],if q3[i]!=None))
-      f.write("\n")
-         
+   for i in range(len(q)):
+      if q[i] != None and q[i] != "FunctionName" and q[i] != "XXX END OF DEFINE XXX":
+         if (q3[i] == None):
+            f.write("""define(`{0}',`CALL  "/TestSequences\Library\Functions\FNCT_{1}\{0}"($*)')""".format(q[i],q2[i]))
+         else:
+            f.write("""define(`{0}',`CALL {2} = "/TestSequences\Library\Functions\FNCT_{1}\{0}"($*)')""".format(q[i],q2[i],q3[i]))
+         f.write("\n")
+               
 
 
 
@@ -49,15 +58,8 @@ RouteLibrary(sheet)
 f.close()
 
 
-y=[]
-for row_cells in sheet.iter_rows(min_col=1,max_col=1):
-   y.append(row_cells[0].value)
-   
-y.remove('Modul')
-y.remove(None)
+
 
 
    
-      
-
-print(y)
+   
