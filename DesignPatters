@@ -1,0 +1,204 @@
+from time import time
+
+
+start_time=time()
+
+
+
+
+class CreditCard:
+    '''A consumer credit card'''
+    def __init__(self,customer,bank,acnt,limit,optionalBalance=0):
+        '''Create a new credit card instance.
+        Initial balance is zero.
+        customer the name of the customer (e.g., John Bowman )
+         bank the name of the bank (e.g., California Savings )
+        acnt the acount identifier (e.g., 5391 0375 9387 5309 )
+        limit credit limit (measured in dollars)'''
+
+        self._customer=customer
+        self._bank=bank
+        self._account=acnt
+        self._limit=limit
+        self._balance=optionalBalance
+
+    def get_customer(self):
+        return self._customer
+
+    def get_bank(self):
+        return self._bank
+
+    def get_account(self):
+        '''Return the card identifing number(usualy stored as a string)'''
+        return self._account
+
+    def get_limit(self):
+        '''Return current credit limit'''
+        return self._limit
+
+    def get_balance(self):
+        '''Return current balance'''
+        return self._balance
+
+
+    def charge(self,price):
+
+        '''Charge the given amount to the card,assuming sufficient credit limit.
+        Return True if charge was processed.False if charge was denied'''
+        if type(price)==int or type(price)==float and price>0:
+            if price+self._balance>self._limit:
+                print("The limit was exceed")
+                return False
+            else:
+                self._balance+=price
+                print('The deposit was made')
+                return True
+        else:
+            print('The money amount the user wish to deposit  must be a number ')
+            return False
+
+    def make_payment(self,amount):
+        if type(amount)==float or type(amount)==int and amount>0:
+            '''Process customer payment that reduces balance'''
+            self._balance-=amount
+        else:
+            print("The payment  amount must be a number")
+            return False
+
+
+
+class PredatoryCreditCard(CreditCard):
+    OverLimitFee=5
+    count=0
+    '''An extension to CreditCard that compunds interest and fees'''
+    def __init__(self, customer, bank, acnt, limit, apr=0):
+        '''Create a new predatory credit card instance'''
+        super().__init__(customer, bank, acnt, limit)  # call super constructor
+        self._apr = apr
+
+    def charge(self,price):
+        '''Charge given price to the card,assuming sufficient credit limit.
+
+        Return True if charge was processed.
+        Return False and asses 5$ fee if charge is denied'''
+
+        succes=super().charge(price)
+        PredatoryCreditCard.count+=1
+        if PredatoryCreditCard.count>10:
+            PredatoryCreditCard.OverLimitFee+=1
+
+        if not succes:
+            self._balance-=PredatoryCreditCard.OverLimitFee
+        return succes
+
+    def process_month(self):
+        '''Asses monthly interest on outstanding balance'''
+        if self._balance > 0:
+            # if positive balance, add anual percentage rate self._apr
+            monthly_factor = pow(1+self._apr,1/12)
+            self._balance *= monthly_factor
+
+
+class Lone(CreditCard):
+    def __init__(self, customer, bank, acnt, limit,loneAmount,inter=300):
+        '''Create a new Lone class for making lone with a interest rate'''
+
+        super().__init__(customer, bank, acnt, limit)  # call super constructor,min rate its =300 dollars as
+        self._inter = inter   # (interest rate)                    #default
+        self._loneAmount=loneAmount
+
+    def charge(self,price):
+        self._limit += self._loneAmount
+        '''Charge given lone to the card.
+        Also raise the limit before the charge is done
+
+        Return True if charge was processed.
+        Return False and asses 5$ fee if charge is denied'''
+        succes=super().charge(price)
+        self._balance += self._loneAmount
+
+    def montly_rate(self):
+        self._balance-=self._inter
+        print("Your montly rate has been paid",self._balance)
+
+
+
+
+
+Client1=CreditCard('Florin Cernica',"BCF",'5391 0375 9387 5309',3000)
+print(Client1._customer)
+Client1.charge(price=4000)
+print(Client1.get_balance())
+Client1.charge(price=2000)
+print(Client1.get_balance())
+
+
+
+
+
+#Tests
+if __name__=='__main__':
+    wallet=[]
+    wallet.append(CreditCard('Florin Cernica',"BCF",'5391 0375 9387 5309',3000))
+    wallet.append(CreditCard('Gheorghe Popescu',"BCD",'5392 0375 9387 5309',2000))
+    wallet.append(CreditCard('Adrian Vulpeanu',"ING",'5391 0375 9387 5302',1200))
+
+    for val in range(1,35):
+        wallet[0].charge(val)
+        wallet[1].charge(2*val)
+        wallet[2].charge(4*val)
+
+    for c in range(3):
+        print("Customer=", wallet[c].get_customer())
+        print("Bank=", wallet[c].get_bank())
+        print("Account=", wallet[c].get_account())
+        print("Limit=", wallet[c].get_limit())
+        print("Balance=", wallet[c].get_balance())
+        while wallet[c].get_balance( ) > 100:
+            wallet[c].make_payment(100)
+        print('New Balance= ',wallet[c].get_balance())
+
+print('*'*100)
+Client2=PredatoryCreditCard('Adrian Vulpeanu','ING','5391 0323 9384 5940',12000,0.085)
+print(Client2.process_month())
+Client2.charge(5500)
+Client2.process_month()
+Client2.process_month()
+print(Client2.get_balance())  #balance after 2 year's of interest rate
+Client2.charge(100)
+Client2.charge('3233')
+print(Client2.get_balance())
+for i in range(10):
+    Client2.charge(100)
+print(Client2.get_balance())
+#overlimit fee will raise with 4 dollars
+print(Client2.charge(20000))
+print(Client2.get_balance())
+
+Client3=Lone('Adrian Vulpeanu','ING','5391 0323 9384 5940',12000,50000)
+print(Client3.get_balance())
+Client3.charge(1)
+print(Client3.get_balance())
+Client3.montly_rate()
+
+#see how muck a client need's to pay over a year
+for i in range (12):
+    Client3.montly_rate()
+
+
+
+if __name__=="__main__":
+    print('#'*100)
+    Client4=Lone('Adrian Vulpeanu','ING','5391 0323 9384 5940',12000,50000)
+    Client4.charge(5000)
+    print(Client4.get_balance())
+    Client4.montly_rate()
+    Client5 = PredatoryCreditCard('Adrian Vulpeanu', 'ING', '5391 0323 9384 5940', 12000, 0.085)
+    print(Client5.get_balance())
+    Client5.charge(5500)
+    Client5.process_month()
+    Client5.process_month()
+    print(Client5.get_balance())  # balance after 2 year's of interest rate
+
+end_time=time()
+print(end_time-start_time)
